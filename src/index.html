@@ -340,18 +340,27 @@
               <a href="https://github.com/SealeyWang/EditorPreview">项目预览</a>
             </span>
                 </header>
-                <p>- 参与<strong>实时协同编辑</strong>开发，基于<a href="https://etherpad.org/">Etherpad-little</a>，使用<strong>Express</strong>，原生JS，Jquery </p>
+                <p>- 参与<strong>实时协同编辑</strong>开发，基于<a href="https://etherpad.org/">Etherpad-little</a>，使用<strong>Express</strong>，原生JS，Jquery开发 </p>
+                <p>- 了解<strong>EasySync协同算法</strong>，并整理过 <a href="https://github.com/SealeyWang/blog/blob/master/etherpad/easysync%20%E7%AE%97%E6%B3%95.md">文档</a> </p>
                 <p>- 主要负责开发插件如：加粗、下划线、删除线、分隔线，浮动工具栏、行首菜单（后两个因需求变更，换了交互方式）。</p>
                 <p>- 负责插件的导出的HTML的开发，以及复杂情况下导出html的bug修复，由于是编辑器是单独项目，所以在本地配置Nginx解决跨域问题。</p>
                 <p>- 负责大部分插件的维护，部分插件的复制粘贴、交互问题、相互影响的bug的修复。  </p>
-                <p>- 如：一行文字设置了标题和列表，复制到另一个编辑器上，会把下一行应用的标题样式</p>
+                <p>- 如：排查源码的粘贴流程，发现’块‘标签会作为新行，且行属性未重置，重置后解决了设置标题和列表的行，复制到另一个编辑器上，把下一行应用的标题样式</p>
+                <p>- 如：修改源码的粘贴逻辑，兼容自定义插件（加粗、下划线、删除线）的快捷键操作</p>
+                <p>- 如：修改源码的list样式的设置逻辑，对分隔线不设置list样式</p>
                 <p>- 如：多次缩进列表样式与未缩进时，分隔线插入在光标当前位置的表现不一样</p>
-                <p>- 如：ib-link（可理解为自定义超链接），一行有多个时，全选粘贴、导出html会有出现多个小icon </p>
+                <p>- 如：通过Selection -> Range -> getBoundingClientRect 获取光标选中区域位置，以此为基础计算浮动工具栏位置，排列出的视觉效果更整齐（参考飞书），且支持了键盘选中弹出</p>
+                <p>- 如：导出ib-link（可理解为自定义样式的超链接）会有出现多个小icon，通过添加object标签，解决a标签嵌套，html自动补全的问题</p>
                 <p>- 解决部分移动端兼容问题，</p>
                 <p>- 如:IOS设置一些样式时，导致文档内容置空、IOS样式文件与缓存导致错乱、IOS选中文本复制导致内容丢失</p>
-                <p>- 参与过协同编辑性能优化方案调研与实施,主要负责插件的性能优化，并优化部署流程 减少接近100个文件请求</p>
+                <p>- 如：IOS网页部署后生效不及时，通过了解HTTP和IOS浏览器内核的缓存机制，为html加上Cache-Control:max-age:0解决了这个问题</p>
+                <p>- 参与协同编辑性能优化方案调研与实施,主要负责插件的性能优化，并优化部署流程 减少接近100个文件请求</p>
                 <p>- 插件优化基于<a href="https://www.npmjs.com/package/ep_webpack">ep_webpack</a>主要是通过在Node服务启动时，拿到插件列表与hook路径，将css、js文件合并，再覆盖客户端hooks路径到bundle后的js上</p>
-                <p>- 接入sentry收集console日志、排查websocket消息，处理线上偶现问题 如：slcommit，session无权限问题的  </p>
+                <p>- 在websocket重连、图片协同等较为复杂的地方打印相关日志，接入Sentry收集错误信息和console日志，便于分析问题</p>
+                <p>- <strong>难点</strong>：参与定位偶现问题，输入文字时，出现错误提示'slcommit', 编辑器锁定无法输入</p>
+                <p>- 添加log，确定报错的message，分析websocket message，发现'slcommit'的message之前，发送了'client_ready' message用于session检查，影响了文档的版本导致，最后创建新的Message类型，拆分session检查
+                    不影响文档版本，后续又处理session的更新机制，解决了这个问题
+                </p>
             </li>
             <li>
                 <header>
@@ -362,12 +371,16 @@
             </span>
                 </header>
                 <p>- 该项目分为官网和内容管理系统两部分</p>
-                <p>-
-                    官网基于Gatsby，使用GraphQL查询接口、本地数据，使用React生成静态页面用以发布
-                </p>
+                <p>- 官网基于Gatsby，使用GraphQL查询接口、本地数据，使用React生成静态页面用以发布</p>
                 <p>- 内容管理系统使用strapi(一个基于Node.js的 Headless CMS)</p>
-                <p>- 主要负责移动端和PC端网页适配，细节优化。图片、文章内容维护与接口构建。</p>
-                <p>- 多环境配置，<strong>Docker</strong>镜像构建，优化构建速度与体积</p>
+                <p>- 主要负责还原设计图，移动端和PC端网页适配，图片、文章内容维护与接口构建。</p>
+                <p>- 通过Google、和自己尝试，处理SVG图片在Safari模糊的问题，虽然<a href="https://stackoverflow.com/questions/60258766/lottie-animated-svg-very-pixelated-blurry-in-safari-but-not-chrome-ff/69656992#69656992">方法</a>有点取巧</p>
+                <p>- 解决在某个IOS手机中字体颜色不对的问题</p>
+                <p>- 解决发布文章后，文章详情页没有生成，原因是文章列表通过fetch获取数据，而详情页是构建时生成</p>
+                <p>- 通过问构建页面时请求接口，GraphQL查询数据，解决文章list 对应正确的detail</p>
+                <p>- 发布文章时通过配置的WebHooks 触发gitlab CI/CD让Docker镜像重新生成界面</p>
+                <p>- 配合运维迁移服务，多环境配置，<strong>Docker</strong>镜像构建，优化构建速度与体积</p>
+                <p>- 原来是海外项目，迁移到国内云服务后，对Gatsby支持不够友好，加上公司产品已开发出来，估计这也是后续不用这个官网的原因吧</p>
             </li>
             <li>
                 <header>
@@ -378,9 +391,9 @@
             </span>
                 </header>
                 <p>- 我主要负责后台管理系统开发，参与小程序开发</p>
-                <p>- 后台管理系统基于<strong>React，Mobx, Antd</strong></p>
+                <p>- 后台管理系统基于<strong>React，Mobx, Antd</strong>，开发校友管理，学院管理，学籍管理，新闻管理，活动管理等</p>
                 <p>- 该项目使用 React Hooks TypeScript，自定义hooks，自定义组件，代码复用性和可读性更好</p>
-                <p>- 小程序使用Taro开发，主要负责与管理后有交集的部分开发，降低沟通调试成本</p>
+                <p>- 小程序使用Taro开发，主要负责与管理后有交集的部分开发，如发布活动后在小程序上查看</p>
             </li>
 
             <li>
@@ -405,12 +418,12 @@
                 </header>
                 <p>- 该项目是电力行业的运营、监控、管理系统，可对用电、设备、巡检、储能等</p>
                 <p>- 参与web项目开发，使用jquery开发基本网页结构、统一主题与样式、树形页面</p>
-                <p>- 与设计统一EChart各种图表主题与样式，对配置做封装，节省大量图表的开发时间</p>
+                <p>- 为了减少每个图表都单独写配置，与设计统一EChart各种图表主题与样式，对配置做封装，节省大量图表的开发时间</p>
                 <p>- 自定义高德地图，做出漂亮的样式与地图标记</p>
                 <p>- 基于DCloud 5+App 综合能源、综合能源巡检端跨平台App，负责所有功能开发</p>
                 <p>- 综合能源面向用户，通过视频监控配电室情况，通过图表统计电量、电费、设备运行情况</p>
                 <p>- 综合能源巡检端面向电工，用于处理事故、巡检、 清扫等任务，通过app上传设备实验数据，现场照片</p>
-                <p>- 封装可复用模块：网络请求，账号登录、注册、修改密码、单点登录、检查更新，下载安装、拍照、图片选择、文件上传</p>
+                <p>- 为了提升开发效率，封装可复用模块：网络请求，账号登录、注册、修改密码、单点登录、检查更新，下载安装、拍照、图片选择、文件上传</p>
             </li>
             <li>
                 <header>
@@ -436,42 +449,41 @@
     </section>
 
 
-    <section class="openSource">
-        <h2>开源项目</h2>
-        <ul>
-            <li >
-                <header>
-                    <h3>TODO工具</h3>
-                    <span>
-              <a href="https://github.com/SealeyWang/node-todo1">源码链接</a>
-              <a href="https://www.npmjs.com/package/node-todo-wsl-1">项目预览</a>
-            </span>
-                </header>
-                <p>这是我在学习 <strong>Node.js和 单元测试</strong>制作的一个命令行小工具</p>
-            </li>
-            <li >
-                <header>
-                    <h3>海绵宝宝</h3>
-                    <span>
-              <a href="https://github.com/SealeyWang/SpongeBob">源码链接</a>
-              <a href="https://sealeywang.github.io/SpongeBob/dist/index.html">项目预览</a>
-            </span>
-                </header>
-                <p>这是我在学习 <strong>CSS3</strong> 时制作的一个可爱作品</p>
-            </li>
-            <li>
-                <header>
-                    <h3>简易画板</h3>
-                    <span>
-              <a href="https://github.com/SealeyWang/canvas-demo1">源码链接</a>
-              <a href="https://sealeywang.github.io/canvas-demo1/">项目预览</a>
-            </span>
-                </header>
-                <p>我在学习 <strong>Canvas</strong> 时做的一个小作品</p>
-            </li>
-        </ul>
-    </section>
-
+<!--    <section class="openSource">-->
+<!--        <h2>开源项目</h2>-->
+<!--        <ul>-->
+<!--            <li >-->
+<!--                <header>-->
+<!--                    <h3>TODO工具</h3>-->
+<!--                    <span>-->
+<!--              <a href="https://github.com/SealeyWang/node-todo1">源码链接</a>-->
+<!--              <a href="https://www.npmjs.com/package/node-todo-wsl-1">项目预览</a>-->
+<!--            </span>-->
+<!--                </header>-->
+<!--                <p>这是我在学习 <strong>Node.js和 单元测试</strong>制作的一个命令行小工具</p>-->
+<!--            </li>-->
+<!--            <li >-->
+<!--                <header>-->
+<!--                    <h3>海绵宝宝</h3>-->
+<!--                    <span>-->
+<!--              <a href="https://github.com/SealeyWang/SpongeBob">源码链接</a>-->
+<!--              <a href="https://sealeywang.github.io/SpongeBob/dist/index.html">项目预览</a>-->
+<!--            </span>-->
+<!--                </header>-->
+<!--                <p>这是我在学习 <strong>CSS3</strong> 时制作的一个可爱作品</p>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--                <header>-->
+<!--                    <h3>简易画板</h3>-->
+<!--                    <span>-->
+<!--              <a href="https://github.com/SealeyWang/canvas-demo1">源码链接</a>-->
+<!--              <a href="https://sealeywang.github.io/canvas-demo1/">项目预览</a>-->
+<!--            </span>-->
+<!--                </header>-->
+<!--                <p>我在学习 <strong>Canvas</strong> 时做的一个小作品</p>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </section>-->
 
     <section class="jobs">
         <h2>工作经历</h2>
